@@ -19,15 +19,14 @@ API_KEY = os.getenv("API_KEY")
 
 youtube = build('youtube','v3',developerKey=API_KEY)
 
-maxResults = 30
+maxResults = 2000
 # Search for videos in the specified genre
 search_response = youtube.search().list(
     q='games',
     part='id',
     maxResults=maxResults,  # Adjust the number of search results as needed
     type='video',
-    regionCode='US',
-    order='random'
+    regionCode='US'
 ).execute()
 
 # Extract the video IDs from the search results
