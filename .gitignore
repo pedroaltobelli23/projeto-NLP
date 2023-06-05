@@ -161,3 +161,4 @@ cython_debug/
 #.idea/
 
 parsed_data_renamed_train.json
+data/

@@ -10,20 +10,26 @@ Parte 1: definir produto e buscar base de dados
     
     a) Qual é o problema que esse produto resolve?
 
-        Definir as tags de um video do youtube a partir de sua legenda completa
+        Definir as tags de uma pergunta no stackOverflow a partir da pergunta
     
     b) Qual é o público a que o produto atende?
 
-        Pessoas que querem postar videos no youtube
+        O publico pode ser alguma empresa que tambem faz Q&A de perguntas de programacao ou um usuario que nao sabe o que colocar no campo
+        de tags. Para uma empresa, eles poderiam usar para classificar as perguntas automaticamente tendo mais controle sobre as tags.
 
     c) Como esse produto se relaciona a machine learning?
-        NLP
+
+        NLP, classificacao por key-words
 
 
 2 - Escolha uma base de dados (maior que a memória do seu computador – se precisar, faça webscrapping ou use APIs!)
 	
     a) Baixe a base de dados
 	
+        https://www.kaggle.com/datasets/stackoverflow/stacksample
+
+        https://www.kaggle.com/datasets/stackoverflow/stackoverflow?select=posts_questions (versao estendida)
+
     b) Organize os dados de forma que possam ser lidos em minibatches pela API do Keras
 	
     c) Defina qual (ou quais) métrica(s) poderiam ser usadas na sua base de dados para avaliar se IA e NLP são soluções viáveis para a realização do seu produto?
@@ -35,6 +41,9 @@ Parte 2: experimentar estratégias de machine learning
 	
     a) Uma abordagem tradicional “baseline” (por exemplo, as disponíveis no sklearn)
 	
+        Para o baseline do projeto sera feito bag of words e em seguida regressao linear. Por ser uma classificacao multiclass-multioutput,
+        eu fiz uma coluna dummie para cada uma das tags. 
+
     b) Uma abordagem com Deep Learning treinada integralmente in-house
 	
     c) Uma abordagem com Deep Learning que usa redes pré-treinadas para alimentar uma rede neural treinada in-house
