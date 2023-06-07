@@ -1,5 +1,0 @@
-import re
-
-string = " <p>Please help me I want my program to choose a site if it has not yet <strong>username</strong> then it will proceed it to <em>ch_uname.php</em>. Then if the login credentials have already <strong>username</strong> then it will be preceded to <em>index_profile.php</em>. Thank you in advance.</p> <pre><code>if(mysql_num_rows($runcreds)&gt; 0 ) //checking log in forms{if(mysql_num_rows($run_uname)&gt;=1 ) //if username has already avalaible(proceed){$_SESSION['Email_add']=$email;echo &lt;script&gt;window.open('modules/index_profile.php','_self')&lt;/script&gt;;}if(mysql_num_rows($run_uname)&lt;1)//choouse username if has not yet username{$_SESSION['Email_add']=$email;echo &lt;script&gt;window.open('forms/ch_uname.php','_self')&lt;/script&gt;;//modules/index_profile.php}}else{echo &lt;script&gt;alert('Admin details are incorrect!')&lt;/script&gt;;}}</code></pre>"
-new = re.sub("[^0-9a-zA-Z]+"," ",string)
-print(new)

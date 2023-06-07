@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Projeto de NLP - </title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Predicao de Tags de perguntas de TI</h1>
+        <div class="form-group">
+            <label for="inputText">Escreva uma pergunta aqui:</label>
+            <textarea class="form-control" id="inputText" rows="4" placeholder="Qual a versao mais atual do Python?"></textarea>
+        </div>
+        <button class="btn btn-primary" onclick="predictBaseline()">Predict with baseline model</button>
+        <button class="btn btn-primary" onclick="predictInhouse()">Predict with Inhouse model</button>
+        <div id="outputDiv" class="mt-3"></div>
+        
+        <script>
+            function predictBaseline() {
+                var inputText = document.getElementById("inputText").value;
+                console.log(inputText);
+                // Make a GET request to the FastAPI endpoint
+                $.get("http://127.0.0.1:8000/baseline/" + inputText, function (data) {
+                    var tags = data.Tags;
+                    // Display the response on the HTML page
+                    document.getElementById("outputDiv").innerHTML = "Tags: " + tags;
+                });
+            }
+
+            function predictInhouse() {
+                var inputText = document.getElementById("inputText").value;
+                console.log(inputText);
+                // Make a GET request to the FastAPI endpoint
+                $.get("http://127.0.0.1:8000/inhouse/" + inputText, function (data) {
+                    var tags = data.Tags;
+                    // Display the response on the HTML page
+                    document.getElementById("outputDiv").innerHTML = "Tags: " + tags;
+                });
+            }
+        </script>
+    
+    </div>
+</body>
+</html>

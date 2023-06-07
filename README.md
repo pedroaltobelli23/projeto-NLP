@@ -45,6 +45,8 @@ Parte 2: experimentar estratégias de machine learning
         eu fiz uma coluna dummie para cada uma das tags. 
 
     b) Uma abordagem com Deep Learning treinada integralmente in-house
+
+        Utilizando redes neurais
 	
     c) Uma abordagem com Deep Learning que usa redes pré-treinadas para alimentar uma rede neural treinada in-house
 	
