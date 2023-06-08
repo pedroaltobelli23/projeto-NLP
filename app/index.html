@@ -10,7 +10,7 @@
         <h1>Predicao de Tags de perguntas de TI</h1>
         <div class="form-group">
             <label for="inputText">Escreva uma pergunta aqui:</label>
-            <textarea class="form-control" id="inputText" rows="4" placeholder="Qual a versao mais atual do Python?"></textarea>
+            <textarea class="form-control" id="inputText" rows="30" placeholder="What is the latest Python version?"></textarea>
         </div>
         <button class="btn btn-primary" onclick="predictBaseline()">Predict with baseline model</button>
         <button class="btn btn-primary" onclick="predictInhouse()">Predict with Inhouse model</button>
@@ -18,24 +18,24 @@
         
         <script>
             function predictBaseline() {
-                var inputText = document.getElementById("inputText").value;
-                console.log(inputText);
+                var inputt = document.getElementById("inputText").value;
+                var inputText = inputt.replace(/[^\w\s]/gi, '');
                 // Make a GET request to the FastAPI endpoint
                 $.get("http://127.0.0.1:8000/baseline/" + inputText, function (data) {
                     var tags = data.Tags;
                     // Display the response on the HTML page
-                    document.getElementById("outputDiv").innerHTML = "Tags: " + tags;
+                    document.getElementById("outputDiv").innerHTML = "Modelo baseline Tags: " + tags;
                 });
             }
 
             function predictInhouse() {
-                var inputText = document.getElementById("inputText").value;
-                console.log(inputText);
+                var inputt = document.getElementById("inputText").value;
+                var inputText = inputt.replace(/[^\w\s]/gi, '');
                 // Make a GET request to the FastAPI endpoint
                 $.get("http://127.0.0.1:8000/inhouse/" + inputText, function (data) {
                     var tags = data.Tags;
                     // Display the response on the HTML page
-                    document.getElementById("outputDiv").innerHTML = "Tags: " + tags;
+                    document.getElementById("outputDiv").innerHTML = "Modelo inhouse Tags: " + tags;
                 });
             }
         </script>
