@@ -1,77 +1,80 @@
-# projeto-NLP
-Projeto NLP
+# Projeto NLP
 
-Avaliação Final – NLP
+## Avaliação Final – NLP
+
 Objetivo: elaborar, desenvolver, avaliar e entregar um produto de dados baseado em IA e NLP.
 
-Parte 1: definir produto e buscar base de dados
+Proposta do Projeto: Classificação de perguntas voltadas a programação
 
-1 - Defina um produto de IA/NLP baseado em dados (não pode ser um chatbot).
+O objetivo do meu projeto é automatizar a parte de classificação de perguntas voltadas a TI tendo em vista a linguagem que está sendo usada e o assunto da pergunta. O banco de dados utilizado para treinar os modelos foi retirado da pagina https://www.kaggle.com/datasets/stackoverflow/stacksample do kaggle e ha uma versao estendida dessa base de dados no seguinte link: https://archive.org/download/stackexchange .
+
+### Preparação dos Dados:
+
+O banco de dados da página do kaggle disponibiliza dois arquivos csv, **Questions.csv** e **Tags.csv**. O arquivo **Questions.csv** possui o id da pergunta e o corpo em HTML da pergunta enquanto **Tags.csv** possuía o id da pergunta e uma tag associada a ela. Com dados em mãos, defini o target sendo a Tag e a feature sendo o body da pergunta. 
+Pelo fato de uma pergunta possuir uma ou mais tags associadas a ela acabei criando um dataframe pandas que continha duas colunas : a primeira contendo o corpo da pergunta porém agora limpo e sem tags do HTML e a segunda contendo uma lista python de tags.
+Essa ideia, apesar de promissora, é de difícil implementação devido a quantidade de espaço necessária para fazê-la,  uma vez que o banco de dados inicial possui aproximadamente 37035 tags únicas e 1264216 perguntas. Supondo o caso de uma regressão logística simples teria de ser feito 37035 colunas dummies o que deixaria o data Frame extremamente pesado.
+Para contornar essa situação resolvi diminuir para somente 150 tags e consequentemente o número de perguntas acabou diminuindo também (não tanto quanto o número de tags). Para diminuir ainda mais o tamanho da DataFrame decidi que treinaria os dois modelos com somente 50% da data completa.
+
+Quantidade de perguntas que possuem as 150 Tags mais comuns: 
+
+![Quantidade Tags](imgs/tags_filtradas_value_count.png)
+
+
+### Modelos de NLP/ML implementados:
+
+1. Baseline:
     
-    a) Qual é o problema que esse produto resolve?
+    O modelo baseline foi feito utilizando a biblioteca do python scikit-learn. Usei um Count Vectorizer com limite de 10000 tokens únicos e com exclusão de stop-words em inglês para fazer a tokenização e em seguida fiz uma regressão logística simples.
 
-        Definir as tags de uma pergunta no stackOverflow a partir da pergunta
-    
-    b) Qual é o público a que o produto atende?
+    Accuracy do modelo: 0.542843099
 
-        O publico pode ser alguma empresa que tambem faz Q&A de perguntas de programacao ou um usuario que nao sabe o que colocar no campo
-        de tags. Para uma empresa, eles poderiam usar para classificar as perguntas automaticamente tendo mais controle sobre as tags.
+2. Inhouse:
 
-    c) Como esse produto se relaciona a machine learning?
+    O modelo inhouse foi feito utilizando o tensor Flow. Inicialmente transformei o dataFrame do pandas em um Dataset do Tensor Flow.Em seguida fiz a tokenização com texto Vectorization. A rede neural escolhida para fazer o modelo foi uma CNN com embedding que ao final do processo retorna um layer  denso com 150 valores determinando a probabilidade da pergunta a ser prevista ser de determinada tag.A função de perda utilizada foi entropia cruzada categórica. Foram feitas 10 epochas 
 
-        NLP, classificacao por key-words
+    ![Output treino inhouse](imgs/outputinhouse.png)
 
+    Accuracy do modelo: 0.4809
+    Loss final: 2.3057
 
-2 - Escolha uma base de dados (maior que a memória do seu computador – se precisar, faça webscrapping ou use APIs!)
-	
-    a) Baixe a base de dados
-	
-        https://www.kaggle.com/datasets/stackoverflow/stacksample
+## Como rodar o projeto
+Dentro da pasta do projeto:
 
-        https://www.kaggle.com/datasets/stackoverflow/stackoverflow?select=posts_questions (versao estendida)
+<code>pip install -r requirements.txt</code>
 
-    b) Organize os dados de forma que possam ser lidos em minibatches pela API do Keras
-	
-    c) Defina qual (ou quais) métrica(s) poderiam ser usadas na sua base de dados para avaliar se IA e NLP são soluções viáveis para a realização do seu produto?
+<code>cd app</code>
 
+<code>uvicorn main:app --reload</code>
 
-Parte 2: experimentar estratégias de machine learning
+Com o navegador utilize o atalho **Ctrl+O** e abra o arquivo index.html
 
-1 - Escolha algumas estratégias de machine learning para testar, incluindo, no mínimo:
-	
-    a) Uma abordagem tradicional “baseline” (por exemplo, as disponíveis no sklearn)
-	
-        Para o baseline do projeto sera feito bag of words e em seguida regressao linear. Por ser uma classificacao multiclass-multioutput,
-        eu fiz uma coluna dummie para cada uma das tags. 
+Caso não funcione, troque as linhas 24 e 35 com a url correta da API no arquivo **app/index.html**
 
-    b) Uma abordagem com Deep Learning treinada integralmente in-house
+Funcionará melhor em inglês.
 
-        Utilizando redes neurais
-	
-    c) Uma abordagem com Deep Learning que usa redes pré-treinadas para alimentar uma rede neural treinada in-house
-	
-    d) Uma abordagem com Deep Learning que usa integralmente uma rede pré-treinada, com o mínimo de pós-processamento (não precisa ser a mesma rede do ítem (c) )
+## Considerações finais e testes
 
-2 - Compare o desempenho de cada uma das estratégias escolhidas. Para isso:
-	
-    a) Treine cada uma das redes in-house várias vezes, e encontre um intervalo de confiança de 95% para o desempenho.
-	
-    b) Compare o desempenho das quatro abordagens que você testou. Reporte o desempenho em um gráfico de barras com intervalos de confiança.
-	
-    c) Encontre casos típicos de erro para cada um dos sistemas treinados.
-	
-    d) Salve os modelos treinados
+As acurácias alcançadas com os modelos não foram altas porém são consistentes e funcionam relativamente bem para perguntas pequenas ou médias e diretas. Possíveis iterações podem ser feitas no futuro para melhorar o desempenho dos modelos: aumentar quantidade de perguntas e tags para treinamento e no caso do modelo inhouse, escalar a CNN para aguentar maior quantidade de dados.
 
-Parte 3: Avalie o custo computacional de inferência dos sistemas
-	
-    a) Avalie o tempo que cada um dos sistemas demora para responder a uma chamada de inferência (predict).
-	
-    b) Compare o tamanho dos modelos e a memória RAM usada por cada um deles ao ser carregado para a memória.
-	
-    c) Levando em consideração as possibilidades de usar VMs gratuitas na Oracle, ou pagas na AWS, decida qual dos modelos é mais adequado para a sua aplicação.
+Boas predições :
 
-Parte 4: Faça o deploy do sistema para uma API e uma demo
-	
-    a) Suba um pequeno servidor usando FastAPI, Django ou a tecnologia a sua escolha. Através de uma API REST, o usuário deve ser capaz de enviar dados ao sistema e receber uma resposta.
-	
-    b) Faça uma página HTML/Javascript que permita acessar facilmente uma demonstração da API através da web.
+Pergunta: https://stackoverflow.com/questions/278363/c-string-manipulation?rq=3
+
+![Boa predicao baseline C++](imgs/boapredicaobaseline.png)
+
+![Boa predicao inhouse C++](imgs/predicaoboainhouse.png)
+
+Outra pergunta: https://stackoverflow.com/questions/76426419/rails-validation-errors-not-displaying-in-console
+
+![Boa predicao baseline ruby rail](imgs/railsboapredicaobaseline.png)
+
+![Boa predicao inhouse ruby rail](imgs/railsboapredicaoinhouse.png)
+
+Predicao nao tao boa :
+
+Pergunta: https://stackoverflow.com/questions/76424563/how-can-i-fix-the-issue-with-my-github-pages-yml-file-when-launching-my-jekyll-w
+
+![Predicao ruim baseline ruby](imgs/predicaoruimbaseline.png)
+
+![Predicao ruim inhouse ruby](imgs/predicaoruiminhouse.png)
+
